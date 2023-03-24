@@ -1,7 +1,7 @@
 # Watermark
 With the idea of protecting the copyright of images, I designed a simple UIUX interface to add watermarks to images.
 ## Enter the host image and initial settings
-When pushing the bottom of loading the image which need to add the watermark, the system would transform the image from RGB to gray image and showed on the user interface.  
+When pushing the bottom of "source image",the image which need to add the watermark would be loaded, the system would transform the image from RGB to gray image and showed on the user interface.  
 ```sh
 function pushbutton1_Callback(hObject, eventdata, handles)
 global img bp row_img col_img
@@ -15,6 +15,7 @@ col_img=length(img(:,1,:));
 bp=get(handles.edit2,'String');
 ```
 ## Enter the watermark image and initial settings
+When pushing the botton "add watermark", the watermark image would be loaded.  
 ```sh
 function pushbutton2_Callback(hObject, eventdata, handles)
 global img bp row_img col_img water_mark sz
@@ -38,7 +39,7 @@ col=1;
 row=1;
 ```
 ## Create a watermark of the original image
-The size of the watermark is the row_end * col_end
+The size of the watermark is the row_end * col_end.
 ```sh
 for i=1:row_end
     for m=1:col_end
@@ -57,4 +58,50 @@ for i=1:row_end
     row_start=row_start + row_sz;
     row_sz=row_sz + row_sz;
 end
+```
+## Hide the watermark in the host image and save it as a new image
+```sh
+bp=get(handles.edit2,'String');
+
+for i=1:row_img
+    for j=1:col_img
+        a=dec2bin(img(i,j),8); %取8個bit
+        a(str2double(bp))=num2str(water_mark_2(i,j));
+        new_water_mark(i,j)=bin2dec(a); %轉回dec
+    end
+end
+    axes(handles.axes3);
+    imshow(uint8(new_water_mark));
+    Qv=get(handles.edit1,'String');
+    imwrite(uint8(new_water_mark),'wm_img.jpg','jpg','Quality',str2double(Qv));
+    
+    msgbox('Watermark embedding Completed');
+```
+## Read the image with the watermark on it and remove the watermark
+When pushing the botton of "check the watermark", the watermark would be removed
+```sh
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global img bp water_mark
+
+iwm = imread('wm_img.jpg');
+
+row_wm=length(img(1,:));
+col_wm=length(img(:,1));
+iwm = imresize(iwm,[row_wm col_wm]);
+
+bp=get(handles.edit2,'String');
+for i=1:row_wm
+    for j=1:col_wm
+        bin=dec2bin(iwm(i,j),8);
+        get_wm(i,j)=str2double(bin(str2double(bp)));
+    end
+end
+axes(handles.axes4);
+imshow(get_wm);
+score=corr2(imresize(get_wm,[256 256]),imresize(water_mark,[256 256]));
+set(handles.edit3,'String',num2str(score));
+msgbox('Get Watermark Completed');
 ```
