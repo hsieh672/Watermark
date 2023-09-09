@@ -1,7 +1,7 @@
 # Watermark
-With the idea of protecting the copyright of images, I designed a simple UIUX interface to add watermarks to images.
+To protect the copyright of images, I designed a simple UIUX interface to add watermarks to images.
 ## Enter the host image and initial settings
-When pushing the bottom of "source image",the image which need to add the watermark would be loaded, the system would transform the image from RGB to gray image and showed on the user interface.  
+When pushing the bottom of the "source image," the image that needs to add the watermark would be loaded, and the system would transform the image from RGB to gray image and show it on the user interface.  
 ```sh
 function pushbutton1_Callback(hObject, eventdata, handles)
 global img bp row_img col_img
@@ -15,7 +15,7 @@ col_img=length(img(:,1,:));
 bp=get(handles.edit2,'String');
 ```
 ## Enter the watermark image and initial settings
-When pushing the botton "add watermark", the watermark image would be loaded.  
+The image will be loaded when the "add watermark" is pushed.  
 ```sh
 function pushbutton2_Callback(hObject, eventdata, handles)
 global img bp row_img col_img water_mark sz
@@ -78,7 +78,7 @@ end
     msgbox('Watermark embedding Completed');
 ```
 ## Read the image with the watermark on it and remove the watermark
-When pushing the botton of "check the watermark", the watermark would be removed
+When pushing the button of "check the watermark," the watermark will be removed
 ```sh
 function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
@@ -95,7 +95,7 @@ iwm = imresize(iwm,[row_wm col_wm]);
 bp=get(handles.edit2,'String');
 for i=1:row_wm
     for j=1:col_wm
-        bin=dec2bin(iwm(i,j),8);
+        bin=dec2binwilli,j),8);
         get_wm(i,j)=str2double(bin(str2double(bp)));
     end
 end
